@@ -6,11 +6,15 @@ using Random = UnityEngine.Random;
 
 public class WhackADot : MonoBehaviour
 {
-    private void OnMouseDown()
+    void OnMouseDown()
     {
-        Debug.Log("Whack a dot!");
-        Vector3 newPos = new Vector3(Random.Range(-10,10),Random.Range(-5,5),0);
-        transform.position = newPos;
-        GameManager.instance.score++;
+        Debug.Log("You whacked a Dot!!!");
+
+        transform.position = new Vector2(
+            Random.Range(-5f, 5f),
+            Random.Range(-5f, 5f)
+            );
+
+        GameManager.instance.Score++;
     }
 }
