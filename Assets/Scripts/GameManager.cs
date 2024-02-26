@@ -65,6 +65,7 @@ public class GameManager : MonoBehaviour
     {
         get
 <<<<<<< HEAD
+<<<<<<< HEAD
         {// When try to get the highscore info
             if (highScores != null && File.Exists(FILE_FULL_PATH))
             {
@@ -77,6 +78,11 @@ public class GameManager : MonoBehaviour
         {
             if (highScores == null)
             {
+=======
+        {
+            if (highScores == null)
+            {
+>>>>>>> parent of 2eada4f (Revised the bug)
                 highScores = new List<int>();
 
 >>>>>>> parent of 2eada4f (Revised the bug)
@@ -93,6 +99,7 @@ public class GameManager : MonoBehaviour
                 //}
             }
 <<<<<<< HEAD
+<<<<<<< HEAD
             // when try to get highscores for the first time:
             else if(highScores == null)
             {
@@ -101,6 +108,8 @@ public class GameManager : MonoBehaviour
                 highScores = new Dictionary<string, int>();
                 highScores.Add("player", 0);
             }
+=======
+>>>>>>> parent of 2eada4f (Revised the bug)
 =======
 >>>>>>> parent of 2eada4f (Revised the bug)
 
@@ -156,8 +165,12 @@ public class GameManager : MonoBehaviour
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     // When time is over, compare the score to the highscores
     bool IsHighScore(int score)
+=======
+    bool isHighScore(int score)
+>>>>>>> parent of 2eada4f (Revised the bug)
 =======
     bool isHighScore(int score)
 >>>>>>> parent of 2eada4f (Revised the bug)
@@ -168,6 +181,7 @@ public class GameManager : MonoBehaviour
             {
                 return true;
             }
+<<<<<<< HEAD
 <<<<<<< HEAD
         }return false;
     }                
@@ -203,6 +217,11 @@ public class GameManager : MonoBehaviour
             var json = JsonUtility.ToJson(new SerializedData());
             File.WriteAllText(FILE_FULL_PATH, json);
         }
+=======
+        }
+
+        return false;
+>>>>>>> parent of 2eada4f (Revised the bug)
 =======
         }
 
