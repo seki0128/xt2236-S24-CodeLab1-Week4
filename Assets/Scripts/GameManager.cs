@@ -5,19 +5,17 @@ using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
     public TextMeshProUGUI display;
     
-    public int score;
-    
     const string FILE_DIR = "/DATA/";
-    const string DATA_FILE = "highScores.txt";
+    const string DATA_FILE = "JSONHighScores.json";
     string FILE_FULL_PATH;
     
+    public int score;
     public int Score
     {
         get
@@ -28,41 +26,39 @@ public class GameManager : MonoBehaviour
         set { score = value; }
 
     }
-
-    string highScoresString = "";
     
-    List<int> highScores;
-
-    public List<int> HighScores
+    private Dictionary<string, int> highScores;
+    string highScoresString = "";
+    public Dictionary<string, int> HighScores
     {
         get
-        {
-            if (highScores == null && File.Exists(FILE_FULL_PATH))
+        {// When try to get the highscore info
+            if (highScores != null && File.Exists(FILE_FULL_PATH))
             {
                 Debug.Log("got from file");
-                
-                highScores = new List<int>();
-
+                // Initiate new dictionary
+                highScores = new Dictionary<string, int>();
+                //******************************************************
+                // Get highscores record from the saved file
                 highScoresString = File.ReadAllText(FILE_FULL_PATH);
-
-                highScoresString = highScoresString.Trim();
                 
-                string[] highScoreArray = highScoresString.Split("\n");
+                //highScoresString = highScoresString.Trim();
+                
+                //string[] highScoreArray = highScoresString.Split("\n");
 
-                for (int i = 0; i < highScoreArray.Length; i++)
-                {
-                    int currentScore = Int32.Parse(highScoreArray[i]);
-                    highScores.Add(currentScore);
-                }
+                //for (int i = 0; i < highScoreArray.Length; i++)
+                //{
+                //    int currentScore = Int32.Parse(highScoreArray[i]);
+                //    highScores.Add(currentScore);
+                //}
             }
+            // when try to get highscores for the first time:
             else if(highScores == null)
             {
                 Debug.Log("NOPE");
-                highScores = new List<int>();
-                highScores.Add(3);
-                highScores.Add(2);
-                highScores.Add(1);
-                highScores.Add(0);
+                // initiate a new dictionary for highscores
+                highScores = new Dictionary<string, int>();
+                highScores.Add("player", 0);
             }
 
             return highScores;
@@ -87,14 +83,12 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    // Start is called before the first frame update
+    
     void Start()
     {
         FILE_FULL_PATH = Application.dataPath + FILE_DIR + DATA_FILE;
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         if (isInGame)
@@ -108,7 +102,7 @@ public class GameManager : MonoBehaviour
         }
 
         //add the fraction of a second between frames to timer
-        timer += Time.deltaTime;
+        timer += Time.deltaTime; 
         
         //if timer is >= maxTime
         if (timer >= maxTime && isInGame)
@@ -119,49 +113,48 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // When time is over, compare the score to the highscores
     bool IsHighScore(int score)
     {
-
-        for (int i = 0; i < HighScores.Count; i++)
+        foreach (int highScore in highScores.Values)
         {
-            if (highScores[i] < score)
+            if (score > highScore)
             {
                 return true;
             }
-        }
-
-        return false;
-    }
-
+        }return false;
+    }                
+    
+    // When there is a highscore, add it to the file
     void SetHighScore()
     {
         if (IsHighScore(score))
         {
             int highScoreSlot = -1;
-
-            for (int i = 0; i < HighScores.Count; i++)
+            
+            foreach (int highScore in highScores.Values)
             {
-                if (score > highScores[i])
+                if (score > highScore)
                 {
-                    highScoreSlot = i;
                     break;
                 }
-            }
                 
-            highScores.Insert(highScoreSlot, score);
+            highScores.Add();
 
-            highScores = highScores.GetRange(0, 5);
+            highScores = highScores.
 
             string scoreBoardText = "";
 
-            foreach (var highScore in highScores)
+            foreach (int highScore in highScores.Values)
             {
                 scoreBoardText += highScore + "\n";
             }
 
             highScoresString = scoreBoardText;
-                
-            File.WriteAllText(FILE_FULL_PATH, highScoresString);
+            
+            // Write dictionary to the json file
+            var json = JsonUtility.ToJson(new SerializedData());
+            File.WriteAllText(FILE_FULL_PATH, json);
         }
     }
 }
