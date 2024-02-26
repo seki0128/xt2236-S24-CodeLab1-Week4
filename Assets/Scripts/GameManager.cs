@@ -23,7 +23,39 @@ public class GameManager : MonoBehaviour
             return score;
         }
 
-        set { score = value; }
+        set
+        {
+            score = value;
+
+            if (isHighScore(score))
+            {
+                int highScoreSlot = -1;
+
+                for (int i = 0; i < HighScores.Count; i++)
+                {
+                    if (score > highScores[i])
+                    {
+                        highScoreSlot = i;
+                        break;
+                    }
+                }
+                
+                highScores.Insert(highScoreSlot, score);
+
+                highScores = highScores.GetRange(0, 5);
+
+                string scoreBoardText = "";
+
+                foreach (var highScore in highScores)
+                {
+                    scoreBoardText += highScore + "\n";
+                }
+
+                highScoresString = scoreBoardText;
+                
+                File.WriteAllText(FILE_FULL_PATH, highScoresString);
+            }
+        }
 
     }
     
@@ -32,6 +64,7 @@ public class GameManager : MonoBehaviour
     public Dictionary<string, int> HighScores
     {
         get
+<<<<<<< HEAD
         {// When try to get the highscore info
             if (highScores != null && File.Exists(FILE_FULL_PATH))
             {
@@ -40,6 +73,13 @@ public class GameManager : MonoBehaviour
                 highScores = new Dictionary<string, int>();
                 //******************************************************
                 // Get highscores record from the saved file
+=======
+        {
+            if (highScores == null)
+            {
+                highScores = new List<int>();
+
+>>>>>>> parent of 2eada4f (Revised the bug)
                 highScoresString = File.ReadAllText(FILE_FULL_PATH);
                 
                 //highScoresString = highScoresString.Trim();
@@ -52,6 +92,7 @@ public class GameManager : MonoBehaviour
                 //    highScores.Add(currentScore);
                 //}
             }
+<<<<<<< HEAD
             // when try to get highscores for the first time:
             else if(highScores == null)
             {
@@ -60,6 +101,8 @@ public class GameManager : MonoBehaviour
                 highScores = new Dictionary<string, int>();
                 highScores.Add("player", 0);
             }
+=======
+>>>>>>> parent of 2eada4f (Revised the bug)
 
             return highScores;
         }
@@ -109,12 +152,15 @@ public class GameManager : MonoBehaviour
         {
             isInGame = false;
             SceneManager.LoadScene("EndScene");
-            SetHighScore();
         }
     }
 
+<<<<<<< HEAD
     // When time is over, compare the score to the highscores
     bool IsHighScore(int score)
+=======
+    bool isHighScore(int score)
+>>>>>>> parent of 2eada4f (Revised the bug)
     {
         foreach (int highScore in highScores.Values)
         {
@@ -122,6 +168,7 @@ public class GameManager : MonoBehaviour
             {
                 return true;
             }
+<<<<<<< HEAD
         }return false;
     }                
     
@@ -156,5 +203,10 @@ public class GameManager : MonoBehaviour
             var json = JsonUtility.ToJson(new SerializedData());
             File.WriteAllText(FILE_FULL_PATH, json);
         }
+=======
+        }
+
+        return false;
+>>>>>>> parent of 2eada4f (Revised the bug)
     }
 }
